@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Controllers\Conn;
 
+use PDO;
+use PDOException;
 
 class User
 {
@@ -27,7 +29,7 @@ class User
     }
 
 
-    public function createUser() : bool
+    public function createUser(): bool
     {
 
         $conn = Conn::getInstance();
@@ -51,4 +53,29 @@ class User
         return  $stmt->execute();
     }
 
+    public function existUser()
+    {
+
+        $conn = Conn::getInstance();
+        $sql = "SELECT * FROM usuario WHERE login = '{$this->login}' ";
+        $query =  $conn->query($sql);
+        $total = $query->fetchAll(PDO::FETCH_ASSOC);
+        $user = false;
+
+        if (count($total) > 0) {
+            foreach ($total as $tabela_usuarios) {
+
+                $user =  array(
+                "login" => $tabela_usuarios['login'], 
+                "senha" => $tabela_usuarios['senha'], 
+                "nome" => $tabela_usuarios['nome'], 
+                "tipo_usuario" => $tabela_usuarios['tipo_usuario'],
+                "tipo_servico" => $tabela_usuarios['tipo_servico']
+                );
+            }
+
+            return $user;
+        }
+        return false;
+    }
 }

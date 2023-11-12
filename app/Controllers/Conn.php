@@ -18,7 +18,7 @@ class Conn
         $db_host = 'localhost';
         $db_name = 'agil_bot';
         $db_user = 'postgres';
-        $db_pass = 'lourenco';
+        $db_pass = 'senha';
 
         try {
             $this->conn = new PDO("pgsql:host=$db_host;dbname=$db_name", $db_user, $db_pass);
@@ -40,4 +40,10 @@ class Conn
     {
         return $this->conn->prepare($sql);
     }
+
+    public function query($sql)
+    {
+        return $this->conn->query($sql);
+    }
+
 }
