@@ -8,17 +8,17 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     * INSERT INTO cliente (cliente, usuario, sequencia) VALUES (:cliente, :identificador,:sequencia)
      */
     public function up(): void
     {
-        Schema::create('bot', function (Blueprint $table) {
+        Schema::create('client', function (Blueprint $table) {
             $table->id();
-            $table->string('name_bot');
-            $table->timestamps();
-            $table->string('usuario');
-            $table->string('token');
-            $table->string('tipo_bot');
+            $table->string("usuario");
+            $table->string("client");
+            $table->bigInteger("sequencia");
             $table->foreign('usuario')->references("email")->on("users");
+            $table->timestamps();
         });
     }
 
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('bot');
+        Schema::dropIfExists('client');
     }
 };

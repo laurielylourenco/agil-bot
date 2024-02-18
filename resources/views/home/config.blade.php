@@ -18,8 +18,6 @@
 
     <section class="section dashboard">
         <div class="row  justify-content-between">
-
-
             <div class="col-lg-6 ">
                 <a href="{{ route('configBot') }}" >
 

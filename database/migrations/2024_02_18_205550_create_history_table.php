@@ -8,17 +8,18 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     * 
      */
     public function up(): void
     {
-        Schema::create('bot', function (Blueprint $table) {
+        Schema::create('history', function (Blueprint $table) {
             $table->id();
-            $table->string('name_bot');
-            $table->timestamps();
-            $table->string('usuario');
-            $table->string('token');
-            $table->string('tipo_bot');
+            $table->string("usuario");
+            $table->string("client");
+            $table->string("msg_client");
+            $table->string("msg_bot");
             $table->foreign('usuario')->references("email")->on("users");
+            $table->timestamps();
         });
     }
 
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('bot');
+        Schema::dropIfExists('history');
     }
 };

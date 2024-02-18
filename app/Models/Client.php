@@ -5,16 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Bot extends Model
+class Client extends Model
 {
     use HasFactory;
-
-    protected $table = 'bot';
+    protected $table = 'client';
 
     protected $fillable = [
         'usuario',
-        'token',
-        'tipo_bot',
-        'name_bot'
+        'client',
+        'sequencia'
     ];
 }
