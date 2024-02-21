@@ -16,6 +16,8 @@ return new class extends Migration
             $table->id();
             $table->string("usuario");
             $table->string("client");
+            $table->string("name");
+            $table->string("username");
             $table->bigInteger("sequencia");
             $table->foreign('usuario')->references("email")->on("users");
             $table->timestamps();

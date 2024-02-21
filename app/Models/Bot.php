@@ -17,4 +17,16 @@ class Bot extends Model
         'tipo_bot',
         'name_bot'
     ];
+
+    public function getTypeBot($botName)
+    {
+        $bot = $this->where(['name_bot' => $botName])->first();
+        return $bot ? $bot->tipo_bot : null;
+    }
+
+    public function getManagerBot($botName)
+    {
+        $bot = $this->where(['name_bot' => $botName])->first();
+        return $bot ? $bot->usuario : null;
+    }
 }
