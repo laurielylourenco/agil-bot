@@ -131,11 +131,9 @@ class BotController extends Controller
             'text' => $text,
         ]);
 
-        // Verifique a resposta ou faça algo com ela, se necessário
         $statusCode = $response->status();
         $content = $response->body();
 
-        // Retorne a resposta ou faça algo com ela, se necessário
         return response($content, $statusCode);
 
         //return true;

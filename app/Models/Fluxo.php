@@ -22,12 +22,22 @@ class Fluxo extends Model
 
     public function lastOrdemSequencial()
     {
-        
+
         $ultimoRegistro = Sequencial::orderBy('ordem', 'desc')->first();
 
         if ($ultimoRegistro) {
             return (int) $ultimoRegistro->ordem;
         }
         return 0;
+    }
+
+    public function getMenu()
+    {
+        return Menu::all();
+    }
+
+    public function getResposta($id)
+    {
+        return Menu::where('option', '=', $id)->first();
     }
 }
