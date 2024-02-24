@@ -15,9 +15,8 @@ class BotController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth')->except('login');
+        //$this->middleware('auth')->except('login');
     }
-
 
     public function config()
     {
@@ -53,23 +52,19 @@ class BotController extends Controller
             ]);
 
             if (is_null($request->token_bot)) {
-
                 return redirect()->route('configBot')->with('info', 'Token Vazio');
             }
 
-            if (!validarTokenTelegram($request->token_bot)) {
-
+            if (!$this->validarTokenTelegram($request->token_bot)) {
                 return redirect()->route('configBot')->with('info', 'Token Invalido');
             }
-
 
             $bot = Bot::where([
                 'token' => $request->token_bot,
                 'usuario' => $request->email,
-            ])->get();
+            ])->first();
 
-
-            if (count($bot) == 0) {
+            if (is_null($bot)) {
 
                 $name_bot = date('dmys') . '' . $request->email;
 
@@ -81,37 +76,68 @@ class BotController extends Controller
                     'name_bot' =>  $name_bot
                 ]);
 
+                $urltelgram = env('APP_URL_WB');
+                $urltelgram_final = "$urltelgram/api/telegram?bot=$name_bot";
 
                 $response = Http::get("https://api.telegram.org/bot" . $request->token_bot . "/setWebhook", [
-                    'url' => "https://e283-45-169-49-148.ngrok-free.app/api/telegram?bot=$name_bot",
+                    'url' => $urltelgram_final,
                     'allowed_updates' => json_encode(['message', 'callback_query', 'inline_query']),
                 ]);
 
                 $body = $response->body();
-                
-                file_put_contents("/var/www/html/learn-laravel/agil-bot/storage/logs/telegram/teste.json", json_encode($body) . ",", FILE_APPEND);
-                file_put_contents("/var/www/html/learn-laravel/agil-bot/storage/logs/telegram/teste1.json", json_encode($name_bot) . ",", FILE_APPEND);
-                       
+
             } else {
 
-                $bot->toQuery()->update([
+                $bot->update([
                     'tipo_bot' => $request->tipo_bot,
                     'token' => $request->token_bot
                 ]);
+
+                $name_bot = $bot->name_bot;
+
+                $urltelgram = env('APP_URL_WB');
+                $urltelgram_final = "$urltelgram/api/telegram?bot=$name_bot";
+
+                $response = Http::get("https://api.telegram.org/bot" . $request->token_bot . "/setWebhook", [
+                    'url' => $urltelgram_final,
+                    'allowed_updates' => json_encode(['message', 'callback_query', 'inline_query']),
+                ]);
+
+                $body = $response->body();
             }
 
             return redirect()->route('configBot')->with('success', 'Sucesso!')->with('token', $request->token);
         } catch (\Throwable $th) {
+
+            file_put_contents("/var/www/html/learn-laravel/agil-bot/storage/logs/telegram/create_update_bot.txt", $th->getMessage() . "\n", FILE_APPEND);
+
             return redirect()->route('configBot')->with('error', $th->getMessage())->with('token', $request->token);
         }
     }
-}
 
+    public function validarTokenTelegram($token)
+    {
+        $padraoRegex = '/^\d+:[\w-]+$/i';
+        return preg_match($padraoRegex, $token) === 1;
+    }
 
-function validarTokenTelegram($token)
-{
-    $padraoRegex = '/^\d+:[\w-]+$/i';
+    public function sendMessageText($botApiToken, $channelId, $text)
+    {
 
-    // Use preg_match para verificar a correspondência
-    return preg_match($padraoRegex, $token) === 1;
+        $url = "https://api.telegram.org/bot{$botApiToken}/sendMessage";
+
+        $response = Http::post($url, [
+            'chat_id' => $channelId,
+            'text' => $text,
+        ]);
+
+        // Verifique a resposta ou faça algo com ela, se necessário
+        $statusCode = $response->status();
+        $content = $response->body();
+
+        // Retorne a resposta ou faça algo com ela, se necessário
+        return response($content, $statusCode);
+
+        //return true;
+    }
 }

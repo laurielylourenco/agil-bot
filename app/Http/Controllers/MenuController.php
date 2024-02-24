@@ -35,7 +35,7 @@ class MenuController extends Controller
 
             
         $wel = (is_null($prencher_welcome) ? "Seja bem vindo AgilBot!" : $prencher_welcome->resposta); 
-// 
+        //cvxc dfgdfg
         return view('home.menu', ['welcome_msg' => $wel]);
     }
 

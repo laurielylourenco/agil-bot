@@ -13,13 +13,15 @@ class Client extends Model
     protected $fillable = [
         'usuario',
         'client',
+        'name',
+        'username',
         'sequencia'
     ];
 
     public function getClient($token_client)
     {
         $client = $this->where(['client' => $token_client])->first();
-        return $client ? $client->id : null;
+        return $client ? $client : null;
     }
 
     public function createClient($client)
@@ -27,14 +29,22 @@ class Client extends Model
         return $this->create($client);
     }
 
-    public function updateSequencia($token_client)
+    public function updateSequencia($token_client, $ordem)
     {
         $client = $this->where(['client' => $token_client])->first();
 
         if ($client) {
-            
-            $new_sequencia = $client->sequencia++;
-            return  $client->toQuery()->update(['sequencia' => $new_sequencia]);
+
+            $new_sequencia = $client->sequencia + 1;
+
+            if ($new_sequencia > $ordem) {
+                $new_sequencia = 1;
+            }
+
+            $client->update(['sequencia' => $new_sequencia]);
+            $client = $client->fresh();
+
+            return $client;
         }
 
         return false;

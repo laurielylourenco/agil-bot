@@ -4,62 +4,68 @@ namespace App\Http\Controllers;
 
 use App\Models\Bot;
 use App\Models\Client;
+use App\Models\Fluxo;
 use Illuminate\Http\Request;
 
 class FluxoController extends Controller
 {
 
-
     public function telegramWebhook(Request $request)
     {
-
         try {
 
+            $cliente = new Client();
+            $fluxo = new Fluxo();
+            $msgs_fila = "Houve problema ao buscar as mensagens";
+            $msgs = [];
             $req_id_client = $request->message['from']['id'];
-            file_put_contents("/var/www/html/learn-laravel/agil-bot/storage/logs/telegram/teste.json", json_encode($request->all()) . ",", FILE_APPEND);
+            $req_username = $request->message['from']['username'];
+            $req_first_name = $request->message['from']['first_name'];
 
-            $bot = new Bot();
-            $bot_tipo = $bot->getTypeBot($request->bot);
+            $botModel = new Bot();
+            $botController = new BotController();
+            $bot_tipo = $botModel->getTypeBot($request->bot);
+
 
             if ($bot_tipo == 2) {
-
-                $cliente = new Client();
 
                 $is_client = $cliente->getClient($req_id_client);
 
                 if (is_null($is_client)) {
 
                     $newcliente =  $cliente->createClient([
-                        'usuario' => $bot->getManagerBot($request->bot),
+                        'usuario' => $botModel->getManagerBot($request->bot),
                         'client' => $req_id_client,
-                        'sequencia' => 0
+                        'username' => $req_username,
+                        'name' => $req_first_name,
+                        'sequencia' => 1
                     ]);
 
-                    file_put_contents("/var/www/html/learn-laravel/agil-bot/storage/logs/telegram/newcliente.json", json_encode($newcliente) . ",", FILE_APPEND);
+                    $msgs = $fluxo->nextMessageSequencial(1);
                 } else {
 
-
-
-                    
-                    file_put_contents("/var/www/html/learn-laravel/agil-bot/storage/logs/telegram/cliente.json", json_encode($is_client) . ",", FILE_APPEND);
+                    $msgs = $fluxo->nextMessageSequencial($is_client->sequencia);
                 }
-            } else {
 
-                file_put_contents("/var/www/html/learn-laravel/agil-bot/storage/logs/telegram/bot_tipo.json", json_encode($bot_tipo) . ",", FILE_APPEND);
+                if (count($msgs) > 0) {
+
+                    $msgs_fila = "";
+                    foreach ($msgs as $m) {
+                        $msgs_fila .= $m->mensagem . "\n";
+                    }
+                }
+
+                $bot_token = $botModel->getBotToken($request->bot);
+
+                $botController->sendMessageText($bot_token, $req_id_client, $msgs_fila);
+                $last_ordem = $fluxo->lastOrdemSequencial();
+
+                $cliente->updateSequencia($req_id_client, $last_ordem);
             }
+
         } catch (\Throwable $th) {
 
             file_put_contents("/var/www/html/learn-laravel/agil-bot/storage/logs/telegram/getMessage.txt", $th->getMessage() . ",", FILE_APPEND);
-
-            //throw $th;
         }
-
-        //file_put_contents("/var/www/html/learn-laravel/agil-bot/storage/logs/telegram/bot.json", json_encode($bot) . ",", FILE_APPEND);
-        /* Aqui tenho que analisar qual tipo fluxo aquele bot tem configurado */
-
-        /* Controlar fluxo do bot */
-
-
-        // return response()->json($request);
     }
 }

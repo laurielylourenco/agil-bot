@@ -29,4 +29,11 @@ class Bot extends Model
         $bot = $this->where(['name_bot' => $botName])->first();
         return $bot ? $bot->usuario : null;
     }
+
+
+    public function getBotToken($botName)
+    {
+        $bot = $this->where(['name_bot' => $botName])->first();
+        return $bot ? $bot->token : null;
+    }
 }
