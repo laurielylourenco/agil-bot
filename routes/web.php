@@ -18,21 +18,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-  
-
-    return view('welcome');
-});
-
-Route::get('/teste', function () {
-
-   /// Alert::info('Success Title', 'Success Message');
-
-    return view('home.teste');
-});
-
-
 Route::controller(AuthLoginRegisterController::class)->group(function () {
+    
+    Route::get('/', 'dashboard')->name('dashboard');
     Route::get('/register', 'register')->name('register');
     Route::post('/store', 'store')->name('store');
     Route::get('/login', 'login')->name('login');

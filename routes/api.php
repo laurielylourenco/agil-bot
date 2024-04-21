@@ -23,8 +23,3 @@ use Illuminate\Support\Facades\Route;
 
 Route::post("telegram",[FluxoController::class,'telegramWebhook']);
 
-
-Route::get("/eu",function (Request $request){
-
-    return response()->json(['mensagem' => 'Isso é uma resposta da API']);
-});
