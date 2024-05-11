@@ -105,7 +105,7 @@
                             </li><!-- End Register Page Nav -->
 
                             <li class="nav-item">
-                                <a class="nav-link collapsed" href="">
+                                <a class="nav-link collapsed" href="{{ route('historico') }}">
                                     <i class="bi bi-clock-history"></i>
                                     <span>Historico</span>
                                 </a>

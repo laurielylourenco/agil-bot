@@ -23,7 +23,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Mensagem de saudação</h5>
-                        <p>Aqui vem texto Lorem ipsum dolor sit amet consectetur, adipisicing elit. Maxime modi laboriosam eos doloribus doloremque assumenda incidunt. Dignissimos commodi sequi quo nisi in reprehenderit, iure, maiores facere temporibus excepturi nulla ratione! </p>
+                        <p>Este é o primeiro texto que será enviado ao cliente</p>
 
                         <!-- Custom Styled Validation -->
                         <form class="row g-3 needs-validation" action="{{ route('createWelcome') }}" method="post">
@@ -34,13 +34,7 @@
                             <div class="col-md-12">
 
                                 <div class="col-sm-10">
-                                    <textarea id="msg_welcome" name="msg_welcome" class="form-control" style="height: 100px">
-
-                                    @if($welcome_msg)
-                                         {{ $welcome_msg }}
-                                    @endif
-                                
-                                </textarea>
+                                    <textarea id="msg_welcome" name="msg_welcome" class="form-control" style="height: 100px">{{ $welcome_msg  ?? '' }}</textarea>
                                 </div>
                             </div>
 
@@ -57,7 +51,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Menu</h5>
-                        <p>Aqui vem texto Lorem ipsum dolor sit amet consectetur! </p>
+                        <p>Elabore opções para que o usuário escolha</p>
 
                         <!-- id="createWelcome" Custom Styled Validation -->
                         <form action="{{ route('createOption') }}" method="post" class="row g-3 needs-validation">
@@ -133,22 +127,25 @@
 </script>
 
 <script>
-    $(document).ready(function () {
-        $('#option').change(function () {
+    $(document).ready(function() {
+       // var campo = $(".msg_welcome");
+        // outros códigos
+      ///  var digitado = campo.val().trim();
+
+        $('#option').change(function() {
             var selectedOption = $(this).val();
 
-            console.log("selectedOption",selectedOption)
+            console.log("selectedOption", selectedOption)
             $.ajax({
                 url: '/check-option',
-                type: 'POST', 
+                type: 'POST',
                 data: {
                     '_token': '{{ csrf_token() }}',
                     'option': selectedOption,
                     'email': "{{Auth::user()->email}}"
                 },
-                success: function (response) {
+                success: function(response) {
 
-              
                     if (response.hasData) {
                         // A opção já possui dados associados
                         $('#menu').val(response.menu);
@@ -159,7 +156,7 @@
                         $('#resposta').val('');
                     }
                 },
-                error: function (error) {
+                error: function(error) {
                     console.log(error);
                 }
             });

@@ -22,7 +22,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">ESCREVA SUA MENSAGEM</h5>
-                        <p>Aqui vem texto Lorem ipsum dolor sit amet consectetur! </p>
+                        <p>Faça perguntas sequenciais para seu cliente.</p>
 
                         <form action="{{ route('create-sequencial') }}" method="post" class="row g-3 needs-validation">
                             @csrf
@@ -30,7 +30,7 @@
                             <div class="col-md-8">
                                 <label for="validationDefault04" class="form-label">Ordem</label>
                                 <select class="form-select" id="ordem" name="ordem" required>
-                                    <option selected disabled value="">...</option>
+                                    <option selected disabled value="">Selecione uma opção</option>
                                     <option value="1">1</option>
                                     <option value="2">2</option>
                                     <option value="3">3</option>
@@ -43,12 +43,7 @@
                             <div class="col-md-12">
                                 <label for="inputPassword" class="col-sm-2 col-form-label">Mensagem</label>
                                 <div class="col-sm-10">
-                                    <textarea id="mensagem" name="mensagem" class="form-control" style="height: 50px">
-
-                                    @if($mensagem_criada)
-                                         {{ $mensagem_criada }}
-                                    @endif
-                                </textarea>
+                                    <textarea id="mensagem" name="mensagem" class="form-control" style="height: 50px">{{ $mensagem_criada ?? '' }}</textarea>
                                 </div>
                             </div>
 
@@ -69,6 +64,9 @@
 </main>
 
 <script>
+    var campo = $(".mensagem");
+    // outros códigos
+    var digitado = campo.val().trim();
     // Verifique se há mensagem de sucesso
     @if(session('success'))
 

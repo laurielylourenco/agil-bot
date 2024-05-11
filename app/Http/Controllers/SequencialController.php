@@ -35,7 +35,7 @@ class SequencialController extends Controller
 
          $wel = (is_null($prencher_welcome) ? "Seja bem vindo AgilBot!" : $prencher_welcome->resposta); 
         */
-        return view('home.sequencial',["mensagem_criada" => "inicio"]);
+        return view('home.sequencial');
     }
 
     public function createMensagem(Request $request)

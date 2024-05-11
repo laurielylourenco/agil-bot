@@ -34,8 +34,9 @@ class MenuController extends Controller
         ])->first();
 
             
-        $wel = (is_null($prencher_welcome) ? "Seja bem vindo AgilBot!" : $prencher_welcome->resposta); 
-        //cvxc dfgdfg
+        $wel = (is_null($prencher_welcome) ? "" : $prencher_welcome->resposta); 
+       
+     //   var_dump($wel);
         return view('home.menu', ['welcome_msg' => $wel]);
     }
 

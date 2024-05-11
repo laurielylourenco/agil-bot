@@ -3,8 +3,10 @@
 use App\Http\Controllers\AuthLoginRegisterController;
 use App\Http\Controllers\BotController;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\SequencialController;
+use App\Models\History;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -55,5 +57,10 @@ Route::controller(BotController::class)->group(function(){
     Route::get('/list/bot', 'listBot')->name('lista-bot');
     Route::post('/config-form/bot/', 'configBotForm')->name('configBotForm');
 
-    
+});
+
+Route::controller(HistoryController::class)->group(function(){
+
+    Route::get('/historico', 'history')->name('historico');
+
 });
