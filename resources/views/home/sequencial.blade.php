@@ -18,13 +18,25 @@
     <section class="section dashboard">
         <div class="row">
 
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">ESCREVA SUA MENSAGEM</h5>
-                        <p>Faça perguntas sequenciais para seu cliente.</p>
+            <div class="col text-end">
+                <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#basicModalSeq">
+                    <i class="bi bi-plus-lg me-1"></i> Nova Mensagem
+                </button>
+            </div>
 
-                        <form action="{{ route('create-sequencial') }}" method="post" class="row g-3 needs-validation">
+            <div class="modal fade" id="basicModalSeq" tabindex="-1">
+                <div class="modal-dialog modal-fullscreen-sm-down modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">ESCREVA SUA MENSAGEM</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+
+                        <div class="modal-body">
+
+
+                            <!--  <form action="{{ route('create-sequencial') }}" method="post" class="row g-3 needs-validation"> -->
                             @csrf
                             <input type="hidden" name="email" id="email" value="{{Auth::user()->email}}">
                             <div class="col-md-8">
@@ -37,23 +49,52 @@
                                     <option value="4">4</option>
                                     <option value="5">5</option>
                                     <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
                                 </select>
                             </div>
 
                             <div class="col-md-12">
                                 <label for="inputPassword" class="col-sm-2 col-form-label">Mensagem</label>
                                 <div class="col-sm-10">
-                                    <textarea id="mensagem" name="mensagem" class="form-control" style="height: 50px">{{ $mensagem_criada ?? '' }}</textarea>
+                                    <textarea id="mensagem" name="mensagem" class="form-control" style="height: 100px">{{ $mensagem_criada ?? '' }}</textarea>
                                 </div>
                             </div>
 
-                            <div class="col-12">
-                                <button class="btn btn-primary" type="submit">Cadastrar</button>
-                            </div>
-                        </form>
+                            <!--      </form> -->
 
+                        </div>
+
+                        <div class="modal-footer">
+
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i></button>
+                            <button type="button" class="btn btn-success" id="insertSequencial" data-bs-dismiss="modal"><i class="bi bi-plus-lg"></i></button>
+
+                        </div>
                     </div>
                 </div>
+            </div><!-- End Large Modal-->
+
+        </div>
+
+        <div class="row mt-5">
+
+            <div class="list-group">
+
+                <!--      <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
+                    The current link item
+                </a> -->
+                @if (count($mensagens) !== 0)
+                <ol class="list-group list-group-numbered">
+                    @foreach($mensagens as $msg)
+
+                    <li class="list-group-item"> {{$msg->mensagem}}</li>
+                    @endforeach
+                </ol>
+                @endif
+
 
             </div>
 
@@ -66,7 +107,7 @@
 <script>
     var campo = $(".mensagem");
     // outros códigos
-    var digitado = campo.val().trim();
+    //  var digitado = campo.val().trim();
     // Verifique se há mensagem de sucesso
     @if(session('success'))
 
@@ -91,6 +132,39 @@
 
 <script>
     $(document).ready(function() {
+
+        $("#insertSequencial").click(function() {
+            let ordem = $("#ordem").val();
+            let mensagem = $("#mensagem").val();
+
+            $.ajax({
+                url: '/createMensagem',
+                type: 'POST',
+                data: {
+                    '_token': '{{ csrf_token() }}',
+                    'ordem': ordem,
+                    'mensagem': mensagem,
+                    'email': "{{Auth::user()->email}}"
+                },
+                success: function(response) {
+
+                    console.log("response.hasData", response.hasData)
+                    if (response.hasData) {
+                        // A opção já possui dados associados
+                        $('#mensagem').val(response.mensagem);
+                    } else {
+                        // Limpar os campos se não houver dados associados
+                        $('#mensagem').val('');
+                    }
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+
+        });
+
+
         $('#ordem').change(function() {
             var selectedOrdem = $(this).val();
 

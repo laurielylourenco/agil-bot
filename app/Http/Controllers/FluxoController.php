@@ -28,7 +28,6 @@ class FluxoController extends Controller
             $bot_tipo = $botModel->getTypeBot($request->bot);
 
 
-
             if ($bot_tipo == 1) {
 
                 $is_client = $cliente->getClient($req_id_client);

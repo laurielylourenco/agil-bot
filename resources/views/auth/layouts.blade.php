@@ -35,7 +35,7 @@
 
 <body>
 
-    <nav class="navbar navbar-expand-lg bg-light">
+    <nav class="navbar navbar-expand bg-light">
         <div class="container">
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav ms-auto">
@@ -86,23 +86,27 @@
                                 </a>
                             </li><!-- End Dashboard Nav -->
 
-                          
+                             <li class="nav-item">
+                                <a class="nav-link collapsed" href="{{ route('lista-bot') }}">
+                                    <i class="bi bi-card-list"></i>
+                                    <span>Bots</span>
+                                </a>
+                            </li> 
 
-
-                            <li class="nav-item">
+                           <!--  <li class="nav-item">
 
                                 <a class="nav-link collapsed" href="{{ route('menu') }}">
                                     <i class="bi bi-menu-app"></i>
                                     <span>Menu</span>
                                 </a>
-                            </li><!-- End Contact Page Nav -->
+                            </li>
 
                             <li class="nav-item">
                                 <a class="nav-link collapsed" href="{{ route('menu-sequencial') }}">
                                     <i class="bi bi-card-list"></i>
                                     <span>Sequencial</span>
                                 </a>
-                            </li><!-- End Register Page Nav -->
+                            </li> -->
 
                             <li class="nav-item">
                                 <a class="nav-link collapsed" href="{{ route('historico') }}">

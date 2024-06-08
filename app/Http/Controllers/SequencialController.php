@@ -20,7 +20,11 @@ class SequencialController extends Controller
     public function sequencial()
     {
 
-        //$user = auth()->user();
+        $user = auth()->user();
+        $sequencial = new Sequencial();
+        $mensagens = $sequencial->getMensagemSequencialAll($user->email);
+        //
+
 
         /*  
             $prencher_welcome =  Menu::where([
@@ -35,7 +39,7 @@ class SequencialController extends Controller
 
          $wel = (is_null($prencher_welcome) ? "Seja bem vindo AgilBot!" : $prencher_welcome->resposta); 
         */
-        return view('home.sequencial');
+        return view('home.sequencial', ['mensagens' => $mensagens]);
     }
 
     public function createMensagem(Request $request)

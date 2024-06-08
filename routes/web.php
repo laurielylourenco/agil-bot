@@ -35,7 +35,6 @@ Route::controller(AuthLoginRegisterController::class)->group(function () {
 
 Route::controller(MenuController::class)->group(function () {
  
-
     Route::get('/menu', 'menu')->name('menu');
     Route::post('/createWelcome', 'createWelcome')->name('createWelcome');
     Route::post('/createOption', 'createOptionMenu')->name('createOption');

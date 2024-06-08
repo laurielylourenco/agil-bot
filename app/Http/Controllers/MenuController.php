@@ -21,29 +21,23 @@ class MenuController extends Controller
     public function menu()
     {
 
+
+        $menu = new Menu();
+
+        
         $user = auth()->user();
 
-        $prencher_welcome =  Menu::where([
-            'usuario' => $user->email,
-            'option' => "0"
-        ])->first();
+       $menus =  $menu->getMenuAll($user->email);
 
-        $prencher_first =  Menu::where([
-            'usuario' => $user->email,
-            'option' => "1"
-        ])->first();
-
-            
-        $wel = (is_null($prencher_welcome) ? "" : $prencher_welcome->resposta); 
-       
-     //   var_dump($wel);
-        return view('home.menu', ['welcome_msg' => $wel]);
+        //   var_dump($wel);
+        return view('home.menu', ['menus' => $menus]);
     }
 
     public function createWelcome(Request $request)
     {
 
         try {
+
             $request->validate([
                 'msg_welcome' => 'required|string|min:5',
                 'option_welcome' => 'required|string|max:2',
@@ -90,12 +84,27 @@ class MenuController extends Controller
     {
 
         try {
-            $request->validate([
-                'menu' => 'required|string|max:50',
-                'resposta' => 'required|string',
-                'option' => 'required|string|max:2',
-                'email' => 'required|email'
-            ]);
+
+            switch ($request->option) {
+
+                case '0':
+                    $request->validate([
+                        'resposta' => 'required|string|min:5',
+                        'option' => 'required|string|max:2',
+                        'email' => 'required|email'
+                    ]);
+                    break;
+
+                default:
+                    $request->validate([
+                        'menu' => 'required|string|max:50',
+                        'resposta' => 'required|string',
+                        'option' => 'required|string|max:2',
+                        'email' => 'required|email'
+                    ]);
+                    break;
+            }
+
 
             $menu =  Menu::where([
                 'option' => $request->option,
@@ -103,26 +112,31 @@ class MenuController extends Controller
             ])->get();
 
 
-            if (count($menu) == 0) {
+            //var_export($request);
+
+             if (count($menu) == 0) {
 
 
                 Menu::create([
                     'usuario' => $request->email,
                     'option' => $request->option,
-                    'menu' => $request->menu,
+                    'menu' => $request->menu ?? "",
                     'resposta' => $request->resposta
                 ]);
             } else {
 
                 $menu->toQuery()->update([
-                    'menu' => $request->menu,
+                    'menu' => $request->menu ?? "",
                     'resposta' => $request->resposta
                 ]);
-            }
+            } 
+            
             return redirect()->route('menu')->with('success', 'Operação realizada com sucesso!')->with('welcome_msg', "errrrrroiu");;
         } catch (\Exception $e) {
+
+            //var_export($e->getMessage());
             // Captura e trata outros erros
-            return redirect()->route('menu')->with('error', "Erro ao criar menu")->with('welcome_msg', "errrrrroiu");;
+            return redirect()->route('menu')->with('error', "Erro ao criar menu")->with('welcome_msg', $e->getMessage());;
         }
     }
 

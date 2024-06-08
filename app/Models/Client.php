@@ -49,4 +49,10 @@ class Client extends Model
 
         return false;
     }
+
+    public function getAll(){
+        return ;
+    }
+
+
 }

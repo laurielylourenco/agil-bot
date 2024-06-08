@@ -18,4 +18,10 @@ class Menu extends Model
         'resposta'
     ];
 
+    public function getMenuAll($user)
+    {
+        $msgs = $this->where(['usuario' => $user])->orderBy('option', 'asc')->get();
+        return $msgs;
+    }
+
 }

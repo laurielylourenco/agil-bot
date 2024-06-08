@@ -16,4 +16,11 @@ class Sequencial extends Model
         'ordem',
         'mensagem'
     ];
+
+
+    public function getMensagemSequencialAll($user)
+    {
+        $msgs = $this->where(['usuario' => $user])->orderBy('ordem', 'asc')->get();
+        return $msgs;
+    }
 }
