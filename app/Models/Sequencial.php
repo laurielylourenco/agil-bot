@@ -14,13 +14,14 @@ class Sequencial extends Model
     protected $fillable = [
         'usuario',
         'ordem',
-        'mensagem'
+        'mensagem',
+        'id_bot'
     ];
 
 
-    public function getMensagemSequencialAll($user)
+    public function getMensagemSequencialAll($user, $id)
     {
-        $msgs = $this->where(['usuario' => $user])->orderBy('ordem', 'asc')->get();
+        $msgs = $this->where(['usuario' => $user, 'id_bot' => $id])->orderBy('ordem', 'asc')->get();
         return $msgs;
     }
 }

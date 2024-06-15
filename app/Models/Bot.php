@@ -13,27 +13,30 @@ class Bot extends Model
 
     protected $fillable = [
         'usuario',
-        'token',
         'tipo_bot',
-        'name_bot'
+        'hash_bot',
+        'nome',
+        'token_telegram',
+        'hash_bot',
+        'descricao'
     ];
 
     public function getTypeBot($botName)
     {
-        $bot = $this->where(['name_bot' => $botName])->first();
+        $bot = $this->where(['hash_bot' => $botName])->first();
         return $bot ? $bot->tipo_bot : null;
     }
 
     public function getManagerBot($botName)
     {
-        $bot = $this->where(['name_bot' => $botName])->first();
+        $bot = $this->where(['hash_bot' => $botName])->first();
         return $bot ? $bot->usuario : null;
     }
 
 
     public function getBotToken($botName)
     {
-        $bot = $this->where(['name_bot' => $botName])->first();
+        $bot = $this->where(['hash_bot' => $botName])->first();
         return $bot ? $bot->token : null;
     }
 }

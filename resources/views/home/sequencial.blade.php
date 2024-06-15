@@ -144,7 +144,8 @@
                     '_token': '{{ csrf_token() }}',
                     'ordem': ordem,
                     'mensagem': mensagem,
-                    'email': "{{Auth::user()->email}}"
+                    'email': "{{Auth::user()->email}}",
+                    'bot_id': '{{ $bot_id }}'
                 },
                 success: function(response) {
 
@@ -175,7 +176,8 @@
                 data: {
                     '_token': '{{ csrf_token() }}',
                     'ordem': selectedOrdem,
-                    'email': "{{Auth::user()->email}}"
+                    'email': "{{Auth::user()->email}}",
+                    'bot_id': '{{ $bot_id }}'
                 },
                 success: function(response) {
 

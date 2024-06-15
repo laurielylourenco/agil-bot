@@ -35,7 +35,7 @@ Route::controller(AuthLoginRegisterController::class)->group(function () {
 
 Route::controller(MenuController::class)->group(function () {
  
-    Route::get('/menu', 'menu')->name('menu');
+    Route::get('/menu/{id}', 'menu')->name('menu');
     Route::post('/createWelcome', 'createWelcome')->name('createWelcome');
     Route::post('/createOption', 'createOptionMenu')->name('createOption');
     Route::post('/check-option', 'checkOption')->name('checkOption');
@@ -44,7 +44,7 @@ Route::controller(MenuController::class)->group(function () {
 
 Route::controller(SequencialController::class)->group(function() {
 
-    Route::get('/sequencial', 'sequencial')->name('menu-sequencial');
+    Route::get('/sequencial/{id}', 'sequencial')->name('menu-sequencial');
     Route::post('/createMensagem', 'createMensagem')->name('create-sequencial');
     Route::post('/check-ordem', 'checkOrdem')->name('checkOrdem');
 });
@@ -55,6 +55,7 @@ Route::controller(BotController::class)->group(function(){
     Route::get('/config/bot', 'configBot')->name('configBot');
     Route::get('/list/bot', 'listBot')->name('lista-bot');
     Route::post('/config-form/bot/', 'configBotForm')->name('configBotForm');
+    Route::post('/create-bot', 'createbot')->name('createbot');
 
 });
 

@@ -5,7 +5,7 @@
 <main id="main" class="main">
 
     <div class="pagetitle">
-        <h1>Bot-Menu</h1>
+        <h1>Bot-Menu {{$bot_id}}</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="index.html">Home</a></li>
@@ -145,7 +145,8 @@
                     'option': option,
                     'resposta': resposta,
                     'menu': menu,
-                    'email': "{{Auth::user()->email}}"
+                    'email': "{{Auth::user()->email}}",
+                    'bot_id': '{{ $bot_id }}',
                 },
                 success: function(response) {
 
@@ -181,7 +182,8 @@
                 data: {
                     '_token': '{{ csrf_token() }}',
                     'option': selectedOption,
-                    'email': "{{Auth::user()->email}}"
+                    'email': "{{Auth::user()->email}}",
+                    'bot_id': '{{ $bot_id }}',
                 },
                 success: function(response) {
 

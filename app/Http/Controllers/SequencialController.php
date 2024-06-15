@@ -17,29 +17,15 @@ class SequencialController extends Controller
         $this->middleware('auth')->except('login');
     }
 
-    public function sequencial()
+    public function sequencial($id)
     {
 
         $user = auth()->user();
         $sequencial = new Sequencial();
-        $mensagens = $sequencial->getMensagemSequencialAll($user->email);
-        //
+        $mensagens = $sequencial->getMensagemSequencialAll($user->email, $id);
 
 
-        /*  
-            $prencher_welcome =  Menu::where([
-                'usuario' => $user->email,
-                'option' => "0"
-            ])->first();
-
-            $prencher_first =  Menu::where([
-                'usuario' => $user->email,
-                'option' => "1"
-            ])->first();
-
-         $wel = (is_null($prencher_welcome) ? "Seja bem vindo AgilBot!" : $prencher_welcome->resposta); 
-        */
-        return view('home.sequencial', ['mensagens' => $mensagens]);
+        return view('home.sequencial', ['mensagens' => $mensagens, 'bot_id' => $id]);
     }
 
     public function createMensagem(Request $request)
@@ -49,12 +35,14 @@ class SequencialController extends Controller
             $request->validate([
                 'mensagem' => 'required|string|min:5',
                 'ordem' => 'required|string|max:2',
-                'email' => 'required|email'
+                'email' => 'required|email',
+                'bot_id' => 'required'
             ]);
 
             $menu =  Sequencial::where([
                 'ordem' => $request->ordem,
-                'usuario' => $request->email, // 
+                'usuario' => $request->email, //
+                'id_bot' => $request->bot_id
             ])->get();
 
 
@@ -63,7 +51,8 @@ class SequencialController extends Controller
                 Sequencial::create([
                     'ordem' => $request->ordem,
                     'usuario' => $request->email,
-                    'mensagem' => $request->mensagem
+                    'mensagem' => $request->mensagem,
+                    'id_bot' => $request->bot_id
                 ]);
             } else {
 
@@ -75,6 +64,7 @@ class SequencialController extends Controller
             $prencher = Sequencial::where([
                 'ordem' => $request->ordem,
                 'usuario' => $request->email,
+                'id_bot' => $request->bot_id
             ])->first();
 
 
@@ -92,6 +82,7 @@ class SequencialController extends Controller
         $optionData = Sequencial::where([
             'ordem' => $request->ordem,
             'usuario' => $request->email,
+            'id_bot' => $request->bot_id
         ])->first();
 
         if ($optionData) {

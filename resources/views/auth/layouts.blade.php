@@ -93,21 +93,6 @@
                                 </a>
                             </li> 
 
-                           <!--  <li class="nav-item">
-
-                                <a class="nav-link collapsed" href="{{ route('menu') }}">
-                                    <i class="bi bi-menu-app"></i>
-                                    <span>Menu</span>
-                                </a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link collapsed" href="{{ route('menu-sequencial') }}">
-                                    <i class="bi bi-card-list"></i>
-                                    <span>Sequencial</span>
-                                </a>
-                            </li> -->
-
                             <li class="nav-item">
                                 <a class="nav-link collapsed" href="{{ route('historico') }}">
                                     <i class="bi bi-clock-history"></i>

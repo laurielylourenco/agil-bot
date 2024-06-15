@@ -18,19 +18,19 @@ class MenuController extends Controller
         $this->middleware('auth')->except('login');
     }
 
-    public function menu()
+    public function menu($id)
     {
 
 
         $menu = new Menu();
 
-        
+
         $user = auth()->user();
 
-       $menus =  $menu->getMenuAll($user->email);
+        $menus =  $menu->getMenuAll($user->email,$id);
 
         //   var_dump($wel);
-        return view('home.menu', ['menus' => $menus]);
+        return view('home.menu', ['menus' => $menus, 'bot_id' => $id]);
     }
 
     public function createWelcome(Request $request)
@@ -41,12 +41,14 @@ class MenuController extends Controller
             $request->validate([
                 'msg_welcome' => 'required|string|min:5',
                 'option_welcome' => 'required|string|max:2',
-                'email_welcome' => 'required|email'
+                'email_welcome' => 'required|email',
+                'bot_id' => 'required'
             ]);
 
             $menu =  Menu::where([
                 'option' => $request->option_welcome,
                 'usuario' => $request->email_welcome, // 
+                'id_bot' => $request->bot_id,
             ])->get();
 
 
@@ -56,12 +58,14 @@ class MenuController extends Controller
                     'usuario' => $request->email_welcome,
                     'option' => $request->option_welcome,
                     'menu' => "",
-                    'resposta' => $request->msg_welcome
+                    'resposta' => $request->msg_welcome,
+                    'id_bot' => $request->bot_id
                 ]);
             } else {
 
                 $menu->toQuery()->update([
-                    'resposta' => $request->msg_welcome
+                    'resposta' => $request->msg_welcome,
+                    'id_bot' => $request->bot_id
                 ]);
             }
 
@@ -91,7 +95,8 @@ class MenuController extends Controller
                     $request->validate([
                         'resposta' => 'required|string|min:5',
                         'option' => 'required|string|max:2',
-                        'email' => 'required|email'
+                        'email' => 'required|email',
+                        'bot_id' => 'required'
                     ]);
                     break;
 
@@ -100,7 +105,8 @@ class MenuController extends Controller
                         'menu' => 'required|string|max:50',
                         'resposta' => 'required|string',
                         'option' => 'required|string|max:2',
-                        'email' => 'required|email'
+                        'email' => 'required|email',
+                        'bot_id' => 'required'
                     ]);
                     break;
             }
@@ -109,28 +115,30 @@ class MenuController extends Controller
             $menu =  Menu::where([
                 'option' => $request->option,
                 'usuario' => $request->email, // 
+                'id_bot' => $request->bot_id
             ])->get();
 
 
-            //var_export($request);
 
-             if (count($menu) == 0) {
+            if (count($menu) == 0) {
 
 
                 Menu::create([
                     'usuario' => $request->email,
                     'option' => $request->option,
                     'menu' => $request->menu ?? "",
-                    'resposta' => $request->resposta
+                    'resposta' => $request->resposta,
+                    'id_bot' => $request->bot_id
                 ]);
             } else {
 
                 $menu->toQuery()->update([
                     'menu' => $request->menu ?? "",
-                    'resposta' => $request->resposta
+                    'resposta' => $request->resposta,
+                    'id_bot' => $request->bot_id
                 ]);
-            } 
-            
+            }
+
             return redirect()->route('menu')->with('success', 'Operação realizada com sucesso!')->with('welcome_msg', "errrrrroiu");;
         } catch (\Exception $e) {
 
@@ -145,6 +153,7 @@ class MenuController extends Controller
         $optionData = Menu::where([
             'option' => $request->option,
             'usuario' => $request->email,
+            'id_bot' => $request->bot_id
         ])->first();
 
         if ($optionData) {

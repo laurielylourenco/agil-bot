@@ -15,13 +15,13 @@ class Menu extends Model
         'usuario',
         'option',
         'menu',
-        'resposta'
+        'resposta',
+        'id_bot'
     ];
 
-    public function getMenuAll($user)
+    public function getMenuAll($user, $id)
     {
-        $msgs = $this->where(['usuario' => $user])->orderBy('option', 'asc')->get();
+        $msgs = $this->where(['usuario' => $user, 'id_bot' => $id])->orderBy('option', 'asc')->get();
         return $msgs;
     }
-
 }

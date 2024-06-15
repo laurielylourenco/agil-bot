@@ -13,20 +13,48 @@ return new class extends Migration
     {
         Schema::create('bot', function (Blueprint $table) {
             $table->id();
-            $table->string('name_bot');
+            $table->string('hash_bot');
             $table->timestamps();
             $table->string('usuario');
-            $table->string('token');
+            $table->string('token_telegram');
             $table->string('tipo_bot');
+            $table->string('descricao');
+            $table->string('nome');
             $table->foreign('usuario')->references("email")->on("users");
+        });
+
+        Schema::table('menu', function (Blueprint $table) {
+            $table->unsignedBigInteger('id_bot')->nullable();
+
+            // Adiciona a chave estrangeira
+            $table->foreign('id_bot')->references('id')->on('bot')->onDelete('cascade');
+        });
+
+        Schema::table('sequencial', function (Blueprint $table) {
+            $table->unsignedBigInteger('id_bot')->nullable();
+
+            // Adiciona a chave estrangeira
+            $table->foreign('id_bot')->references('id')->on('bot')->onDelete('cascade');
         });
     }
 
+
+    
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
+        Schema::table('menu', function (Blueprint $table) {
+            $table->dropForeign(['id_bot']);
+            $table->dropColumn('id_bot');
+        });
+
+        Schema::table('sequencial', function (Blueprint $table) {
+            $table->dropForeign(['id_bot']);
+            $table->dropColumn('id_bot');
+        });
+
         Schema::dropIfExists('bot');
     }
 };
