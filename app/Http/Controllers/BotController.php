@@ -24,10 +24,19 @@ class BotController extends Controller
         return view('home.config');
     }
 
-    public function configBot()
+    public function configBot($id)
     {
 
-        return view('home.bot');
+        $botinfo = Bot::where([
+            'id' =>  $id
+        ])->first();
+
+        return view('home.bot', [
+            'bot_id' => $id, 'bot_tokent' => $botinfo->token_telegram,
+            'bot_nome' => $botinfo->nome,
+            'bot_desc' => $botinfo->descricao
+
+        ]);
     }
 
     public function listBot()
@@ -80,58 +89,44 @@ class BotController extends Controller
         }
     }
 
-    public function configBotForm(Request $request)
+    public function configBotForm(Request $request, $id)
     {
         try {
 
             $request->validate([
-                'tipo_bot' => 'required|string',
                 'email' => 'required|email'
             ]);
 
-            if (is_null($request->token_bot)) {
-                return redirect()->route('configBot')->with('info', 'token_telegram Vazio');
-            }
 
-            if (!$this->validarTokenTelegram($request->token_bot)) {
-                return redirect()->route('configBot')->with('info', 'token_telegram Invalido');
-            }
 
+            if ($request->token_bot) {
+                if (!$this->validarTokenTelegram($request->token_bot)) {
+                    return redirect()->route('lista-bot')->with('error', 'token_telegram Invalido');
+                }
+            }
             $bot = Bot::where([
-                'token_telegram' => $request->token_bot,
+                'id' => $id,
                 'usuario' => $request->email,
             ])->first();
 
-            if (is_null($bot)) {
 
-                $hash_bot = date('dmys') . '' . $request->email;
+            if ($bot) {
 
-                $hash_bot = hash('sha256', $hash_bot);
-                Bot::create([
-                    'token_telegram' => $request->token_bot,
-                    'usuario' => $request->email,
-                    'tipo_bot' => $request->tipo_bot,
-                    'hash_bot' =>  $hash_bot
-                ]);
+                if ($request->token_bot) {
+                    $bot->update([
+                        'nome' => $request->nome_bot,
+                        'descricao' => $request->des_bot,
+                        'token_telegram' => $request->token_bot
+                    ]);
+                } else {
+                    $bot->update([
+                        'nome' => $request->nome_bot,
+                        'descricao' => $request->des_bot
+                    ]);
+                }
 
-                $urltelgram = env('APP_URL_WB');
-                $urltelgram_final = "$urltelgram/api/telegram?bot=$hash_bot";
 
-                $response = Http::get("https://api.telegram.org/bot" . $request->token_bot . "/setWebhook", [
-                    'url' => $urltelgram_final,
-                    'allowed_updates' => json_encode(['message', 'callback_query', 'inline_query']),
-                ]);
-
-                $body = $response->body();
-            } else {
-
-                $bot->update([
-                    'tipo_bot' => $request->tipo_bot,
-                    'token_telegram' => $request->token_bot
-                ]);
-
-                $hash_bot = $bot->hash_bot;
-
+                $hash_bot = $bot->has_bot;
                 $urltelgram = env('APP_URL_WB');
                 $urltelgram_final = "$urltelgram/api/telegram?bot=$hash_bot";
 
@@ -143,12 +138,12 @@ class BotController extends Controller
                 $body = $response->body();
             }
 
-            return redirect()->route('configBot')->with('success', 'Sucesso!')->with('token_telegram', $request->token_telegram);
+            return redirect()->route('lista-bot')->with('success', 'Sucesso!');
         } catch (\Throwable $th) {
 
             file_put_contents("/var/www/html/learn-laravel/agil-bot/storage/logs/telegram/create_update_bot.txt", $th->getMessage() . "\n", FILE_APPEND);
 
-            return redirect()->route('configBot')->with('error', $th->getMessage())->with('token_telegram', $request->token_telegram);
+            return redirect()->route('lista-bot')->with('error', $th->getMessage());
         }
     }
 

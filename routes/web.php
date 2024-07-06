@@ -52,9 +52,9 @@ Route::controller(SequencialController::class)->group(function() {
 Route::controller(BotController::class)->group(function(){
 
     Route::get('/config', 'config')->name('config');
-    Route::get('/config/bot', 'configBot')->name('configBot');
+    Route::get('/config/bot/{id}', 'configBot')->name('configBot');
     Route::get('/list/bot', 'listBot')->name('lista-bot');
-    Route::post('/config-form/bot/', 'configBotForm')->name('configBotForm');
+    Route::post('/config-form/bot/{id}', 'configBotForm')->name('configBotForm');
     Route::post('/create-bot', 'createbot')->name('createbot');
 
 });

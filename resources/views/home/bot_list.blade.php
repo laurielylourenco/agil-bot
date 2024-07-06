@@ -10,7 +10,7 @@
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"> <a href="index.html">Home</a> </li>
-                <li class="breadcrumb-item active"><a href="{{ route('configBot') }}">Criar Bot</a></li>
+                <li class="breadcrumb-item active"><a href="">Criar Bot</a></li>
             </ol>
         </nav>
     </div><!-- End Page Title -->
@@ -85,8 +85,8 @@
                         <h6 class="card-subtitle mb-2 text-muted">{{$c->tipo_bot == 1 ? 'Menu' : 'Sequencial'  }}</h6>
                         <p class="card-text">{{$c->descricao}}</p>
 
-                        <a type="button" href="{{ route('configBot') }}" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i> </a>
-                        <a type="button" href="{{ route('configBot') }}" class="btn btn-sm btn-warning"><i class="bi bi-pencil-square"></i></a>
+                        <a type="button" href="{{ route('configBot',['id' => $c->id]) }}" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i> </a>
+                        <a type="button" href="{{ route('configBot',['id' => $c->id]) }}" class="btn btn-sm btn-warning"><i class="bi bi-pencil-square"></i></a>
                         <a type="button" href="{{$c->tipo_bot == 1 ? route('menu',['id' => $c->id]) : route('menu-sequencial',['id' => $c->id])  }}" class="btn btn-sm btn-info"><i class="bi bi-arrows-angle-expand"></i> </a>
 
 
@@ -95,21 +95,6 @@
             </div>
             @endforeach
             @endif
-
-            <!-- <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">GranelBot</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">Tipo: Sequencial</h6>
-                        <p class="card-text">Informaçoes sobre a loja</p>
-
-                        <a type="button"  href="{{ route('configBot') }}" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i> </a>
-                        <a type="button"  href="{{ route('configBot') }}" class="btn btn-sm btn-warning"><i class="bi bi-pencil-square"></i></a>
-                        <a type="button"  href="{{ route('configBot') }}" class="btn btn-sm btn-info"><i class="bi bi-arrows-angle-expand"></i> </a>
-
-                    </div>
-                </div>
-            </div> -->
 
         </div>
     </section>

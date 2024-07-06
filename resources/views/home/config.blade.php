@@ -19,7 +19,7 @@
 
 
             <div class="col-lg-6">
-                <a href="{{ route('configBot') }}">
+                <a href="">
                     <div class="card">
                         <div class="card-body text-center">
                             <h5 class="card-title">Bot</h5>
@@ -32,7 +32,7 @@
             </div>
 
             <div class="col-lg-6">
-                <a href="{{ route('configBot') }}">
+                <a href="">
                     <div class="card">
                         <div class="card-body text-center">
                             <h5 class="card-title">Usuario</h5>
