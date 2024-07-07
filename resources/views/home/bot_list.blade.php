@@ -75,9 +75,9 @@
 
         <div class="row mt-5">
 
-        @if (count($contas) !== 0)
+            @if (count($contas) !== 0)
 
-        @foreach($contas as $c)
+            @foreach($contas as $c)
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-body">
@@ -85,7 +85,7 @@
                         <h6 class="card-subtitle mb-2 text-muted">{{$c->tipo_bot == 1 ? 'Menu' : 'Sequencial'  }}</h6>
                         <p class="card-text">{{$c->descricao}}</p>
 
-                        <a type="button" href="{{ route('configBot',['id' => $c->id]) }}" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i> </a>
+                        <a type="button" href="{{ route('archiveBot',['id' => $c->id]) }}" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i> </a>
                         <a type="button" href="{{ route('configBot',['id' => $c->id]) }}" class="btn btn-sm btn-warning"><i class="bi bi-pencil-square"></i></a>
                         <a type="button" href="{{$c->tipo_bot == 1 ? route('menu',['id' => $c->id]) : route('menu-sequencial',['id' => $c->id])  }}" class="btn btn-sm btn-info"><i class="bi bi-arrows-angle-expand"></i> </a>
 
@@ -101,6 +101,7 @@
 
 
 </main>
+
 <script>
     // Verifique se há mensagem de sucesso
     @if(session('success'))
@@ -111,7 +112,7 @@
         title: 'Sucesso!',
         text: "{{ session('success') }}"
     });
-
+    
     @endif
 
     @if(session('error'))
@@ -122,9 +123,6 @@
     });
     @endif
 
-</script>
-
-<script>
     $(document).ready(function() {
         $("#insertBot").click(function() {
             let botname = $("#botname").val();
@@ -145,9 +143,20 @@
                 },
                 success: function(response) {
 
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Sucesso!',
+                        text: "{{ session('success') }}"
+                    });
+
                     console.log("response.hasData", response.hasData)
                 },
                 error: function(error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erro!',
+                        text: "{{ session('error') }}"
+                    });
                     console.log(error);
                 }
             });

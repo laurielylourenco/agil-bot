@@ -18,7 +18,8 @@ class Bot extends Model
         'nome',
         'token_telegram',
         'hash_bot',
-        'descricao'
+        'descricao',
+        'ativo'
     ];
 
     public function getTypeBot($botName)

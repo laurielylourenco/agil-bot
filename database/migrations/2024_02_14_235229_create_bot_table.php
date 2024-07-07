@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('tipo_bot');
             $table->string('descricao');
             $table->string('nome');
+            $table->integer('ativo')->default(1); // 1 ativo // 0 desativado 
             $table->foreign('usuario')->references("email")->on("users");
         });
 

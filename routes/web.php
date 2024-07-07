@@ -53,6 +53,7 @@ Route::controller(BotController::class)->group(function(){
 
     Route::get('/config', 'config')->name('config');
     Route::get('/config/bot/{id}', 'configBot')->name('configBot');
+    Route::get('/archive/bot/{id}', 'archiveBot')->name('archiveBot');
     Route::get('/list/bot', 'listBot')->name('lista-bot');
     Route::post('/config-form/bot/{id}', 'configBotForm')->name('configBotForm');
     Route::post('/create-bot', 'createbot')->name('createbot');

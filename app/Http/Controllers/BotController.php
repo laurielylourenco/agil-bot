@@ -39,13 +39,28 @@ class BotController extends Controller
         ]);
     }
 
+    function archiveBot($id)
+    {
+        $botinfo = Bot::where([
+            'id' =>  $id
+        ])->first();
+
+        if ($botinfo) {
+            $botinfo->update(['ativo' => 0]);
+            return redirect()->route('lista-bot')->with('success', 'Sucesso!');
+        }
+
+        return redirect()->route('lista-bot')->with('error', "Ao deletar o bot");
+    }
+
     public function listBot()
     {
 
         $user = auth()->user();
 
         $contas = Bot::where([
-            'usuario' => $user->email
+            'usuario' => $user->email,
+            'ativo' => 1
         ])->get();
 
         return view('home.bot_list', compact('contas'));
@@ -96,8 +111,6 @@ class BotController extends Controller
             $request->validate([
                 'email' => 'required|email'
             ]);
-
-
 
             if ($request->token_bot) {
                 if (!$this->validarTokenTelegram($request->token_bot)) {
