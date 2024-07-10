@@ -20,4 +20,4 @@ O projeto tem como objetivo a criação de uma plataforma que facilite a criaç�
 ![image](https://github.com/laurielylourenco/agil-bot/assets/49760702/8c9cd9b2-0898-4a19-9292-f6a99f96ba2e)
 
 
-## Ainda em contrução
+## Ainda em construção 🏗️
